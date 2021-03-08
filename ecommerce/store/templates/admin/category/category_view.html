@@ -1,0 +1,73 @@
+{% extends 'admin/base.html' %}
+
+{% block title %}Category View{% endblock %}
+
+{% block content %}
+<!-- Main content -->
+<section class="content">
+  <section class="content-header">
+    <div class="container-fluid">
+      <div class="row mb-2">
+        <div class="col-sm-12">
+          <ol class="breadcrumb float-sm-right">
+            <li class="breadcrumb-item active"><a href="{% url 'CategoryContent' %}">Category / List</a></li>
+            <li class="breadcrumb-item active">View</li>
+          </ol>
+        </div>
+      </div>
+    </div><!-- /.container-fluid -->
+  </section>
+    <div class="container-fluid">
+      <div class="row">
+        <div class="col-12">
+          <div class="card">
+            <div class="card-header">
+              <h3 class="card-title">Category View</h3>
+              
+            </div>
+            <!-- /.card-header -->
+            <div class="card-body">
+              <table class="table table-bordered">
+                <thead>
+                    <tr>
+                      <th scope="col">Attribute</th>
+                      <th scope="col">Value</th>
+                    </tr>
+                  </thead>
+                  <tbody>
+                    
+                    <tr>
+                      <td>Title</td>
+                      <td>{{ category.title }}</td>
+                    </tr>
+                    <tr>
+                      <td>Slug</td>
+                      <td>{{ category.slug }}</td>
+                    </tr>
+                    <tr>
+                      <td>Meta Title</td>
+                      <td>{{ category.meta_title }}</td>
+                    </tr>
+                    <tr>
+                      <td>Summary</td>
+                      <td>{{ category.summary }}</td>
+                    </tr>
+                    <tr>
+                      <td>Image</td>
+                      <td>{{ category.image }}</td>
+                    </tr>
+                    <tr>
+                      <td>Status</td>
+                      <td>{{ category.status }}</td>
+                    </tr>
+    
+                  </tbody>
+              </table>
+            </div>
+            <!-- /.card-body -->
+          </div>
+        </div>
+      </div>
+    </div>
+</section>
+{% endblock content %}

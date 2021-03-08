@@ -1,0 +1,82 @@
+{% extends "admin/base.html"%}
+
+{% block title %}User List{% endblock %}
+
+{% block content %}
+<br>
+<div class="card ">
+    <div class="card-header">
+User list
+    </div>
+    <div class="card-body p-0">
+        <table class="table table-bordered">
+            <thead>
+                <tr>
+                    <th>Id</th>
+                    <th>Username</th>
+                    <th>Email</th>
+                    <th>Last Login</th>
+                    <th>Action</th>
+        
+                </tr>
+            </thead>
+            <tbody>
+                {% for datafeild in data %}
+                
+            
+                <tr>
+                    <td>{{datafeild.id}}</td>
+                    <td>{{datafeild.username}}</td>
+                    <td>{{datafeild.email}}</td>
+                    <td>{{datafeild.last_login}}</td>
+                    <td><a class="delete-button" cid='{{datafeild.id}}'><i class="fas fa-trash-alt"></i></a> &nbsp <a href="{{datafeild.id}}"><i class="fas fa-pen-fancy"></i></a></td>
+        
+                </tr>
+                {% endfor %}
+            </tbody>
+        </table>
+    </div>
+</div>    
+
+{% endblock content %}
+
+{% block scripts %}
+
+<script>
+    $(document).on('click', '.delete-button', function(){
+      var id = $(this).attr("cid");
+    swal({
+      title: "Are you sure?",
+      text: "Once deleted, you will not be able to recover this file!",
+      icon: "warning",
+      buttons: true,
+      dangerMode: true,
+    })
+    .then((willDelete) => {
+      if (willDelete) {
+        $.ajax({
+            type: "POST",
+            url: "{% url 'user_delete' %}",
+            data: {'id':id, csrfmiddlewaretoken:"{{ csrf_token }}"}, 
+            success: function(data)
+            {
+                swal("Your file has been deleted!", {
+                    icon: "success",
+                }).then(function(){
+                    window.location.reload();
+                }); 
+                
+            },
+            error: function(data)
+            {        
+                swal("Oh no!", "Server Error", "error");  
+                swal.stopLoading();
+                swal.close();                                                       
+            }
+        });
+      }
+    });
+  });
+</script>
+
+{% endblock scripts %}

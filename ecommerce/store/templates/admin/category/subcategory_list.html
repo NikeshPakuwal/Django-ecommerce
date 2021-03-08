@@ -1,0 +1,125 @@
+{% extends 'admin/base.html' %}
+
+{% load static %}
+
+{% block title %}Sub Category List{% endblock %}
+
+{% block stylesheet %}
+<link rel="stylesheet" href="{% static 'plugins/datatables-bs4/css/dataTables.bootstrap4.min.css' %}">
+<link rel="stylesheet" href="{% static 'plugins/datatables-responsive/css/responsive.bootstrap4.min.css' %}">
+<link rel="stylesheet" href="{% static 'plugins/datatables-buttons/css/buttons.bootstrap4.min.css' %}">
+<link href="{% static 'ajax_datatable/style.css' %}" rel="stylesheet" />
+{% endblock stylesheet %}
+
+{% block content %}
+
+<!-- Main content -->
+<section class="content-header">
+  <div class="container-fluid">
+    <div class="row mb-2">
+      <div class="col-sm-12">
+        <ol class="breadcrumb float-sm-right">
+          <li class="breadcrumb-item active">Sub Category</li>
+          <li class="breadcrumb-item active">List</li>
+        </ol>
+      </div>
+    </div>
+  </div><!-- /.container-fluid -->
+</section>
+<section class="content">
+    <div class="container-fluid">
+        
+      <div class="row">
+        <div class="col-12">
+          <div class="card">
+            <div class="card-header">
+              <h3 class="card-title">Sub Category List</h3>
+              <div class="card-tools">
+                <a href="{% url 'subCategory' %}">
+                  <button style="float: right;" class="btn btn-outline-info"><i class="fas fa-plus "></i>&nbsp; Add Subcategory </button>
+                </a>
+                
+              </div>
+            </div>
+            <!-- /.card-header -->
+            <div class="card-body">
+              <table id="datatable_permissions" class="table table-bordered">
+                
+              </table>
+            </div>
+            <!-- /.card-body -->
+          </div>
+        </div>
+      </div>
+    </div>
+</section>
+{% endblock content %}
+
+{% block scripts %}
+<script type="text/javascript" src="{% static 'ajax_datatable/utils.js' %}"></script>
+<!-- DataTables  & Plugins -->
+<script src="{% static 'plugins/datatables/jquery.dataTables.min.js' %} "></script>
+<script src="{% static 'plugins/datatables-bs4/js/dataTables.bootstrap4.min.js' %} "></script>
+<script src="{% static 'plugins/datatables-responsive/js/dataTables.responsive.min.js' %} "></script>
+<script src="{% static 'plugins/datatables-responsive/js/responsive.bootstrap4.min.js' %} "></script>
+<script src="{% static 'plugins/datatables-buttons/js/dataTables.buttons.min.js' %} "></script>
+<script src="{% static 'plugins/datatables-buttons/js/buttons.bootstrap4.min.js' %} "></script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/bootbox.js/5.4.1/bootbox.min.js"></script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/datepicker/1.0.10/datepicker.min.js"></script>
+
+
+<script>
+  $(function(){
+    DatatablesViewUtils.initialize_table(
+        $('#datatable_permissions'),
+        "{% url 'subCategoryDatatable' %}",
+        {
+            // extra_options (example)
+            processing: false,
+            autoWidth: false,
+            full_row_select: false,
+            scrollX: false,
+        },
+    );
+
+    $(document).on('click', '.delete-button', function(){
+      var id = $(this).attr("cid");
+    swal({
+      title: "Are you sure?",
+      text: "Once deleted, you will not be able to recover this file!",
+      icon: "warning",
+      buttons: true,
+      dangerMode: true,
+  })
+    .then((willDelete) => {
+      if (willDelete) {
+        $.ajax({
+            type: "POST",
+            url: "{% url 'subcategory_delete' %}",
+            data: {'id':id, csrfmiddlewaretoken:"{{ csrf_token }}"}, 
+            success: function(data)
+            {
+                swal("Your file has been deleted!", {
+                    icon: "success",
+                }).then(function(){
+                    window.location.reload();
+                }); 
+                
+            },
+            error: function(data)
+            {        
+                swal("Oh no!", "Server Error", "error");  
+                swal.stopLoading();
+                swal.close();                                                       
+            }
+        });
+      }
+    });
+  });
+    
+    });
+
+
+</script>
+
+{% endblock scripts %}

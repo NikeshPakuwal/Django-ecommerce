@@ -1,0 +1,92 @@
+{% extends "admin/base.html"%}
+
+{% block title %}Add Product{% endblock %}
+
+{% block content %}
+
+<section class="content">
+  <section class="content-header">
+    <div class="container-fluid">
+      <div class="row mb-2">
+        <div class="col-sm-12">
+          <ol class="breadcrumb float-sm-right">
+            <li class="breadcrumb-item active"><a href="{% url 'ProductContent' %}">Product / List</a></li>
+            <li class="breadcrumb-item active">Create</li>
+          </ol>
+        </div>
+      </div>
+    </div><!-- /.container-fluid -->
+  </section>
+<div class="card card-default">
+    <div class="card-header">
+      <h2 class="card-title">Product</h2>
+      
+    </div>
+    <div class="card-body">
+      
+        <form action="" id="product" method="POST" enctype="multipart/form-data" data-subcategory-url = "{% url 'ajax_load_subcategory' %}">
+            {% csrf_token %}
+
+            {{ prod }}
+
+            <div class="form-group">
+                {{ form }}
+            </div>
+            
+            <button type="submit" id="submit" class="btn btn-success"><i class="fa fa-plus" aria-hidden="true"></i> Submit</button>
+
+        </form>
+    </div>
+   
+</div>
+
+
+<script src="https://code.jquery.com/jquery-3.3.1.min.js"></script>
+
+  <script>
+      $("#id_category").change(function () {
+        var url = $("#product").attr("data-subcategory-url");  // get the url of the `load_cities` view
+        var categoryId = $(this).val();  // get the selected country ID from the HTML input
+
+        $.ajax({                       // initialize an AJAX request
+          url: url,    
+          method: 'get',                // set the url of the request (= localhost:8000/hr/ajax/load-cities/)
+          data: {
+            'category': categoryId       // add the country id to the GET parameters
+          },
+          success: function (data) {   // `data` is the return of the `load_cities` view function
+            $("#id_subcategory").html(data);  // replace the contents of the city input with the data that came from the server
+          }
+        });
+
+      });
+
+
+    $(document).ready(function (e) {
+      $("#id_title").blur(function (e) {
+          var isDisabled = $('#id_slug').prop('disabled');
+          if (!isDisabled) {
+              $('#id_title').val($.trim($('#id_title').val()));
+              var title = $('#id_title').val();
+              var forSuggestTitle = title;
+              title = title.toLowerCase();
+              title = title.trim();
+              var shortwords = /\b()\b/g;
+              title = title.replace(shortwords, function (fullmatch, badword) {
+                  return new Array(badword.length + 1).join('');
+              });
+              title = title.replace(/[^a-zA-Z0-9]/g, '-');
+              title = title.replace(/(-){2,}/g, '-');
+              title = title.replace(/-$/g, '');
+              title = title.replace(/(^\s*-)|(,\s*$)/g, '');
+                      //update the value with new seo url
+                      $("#id_slug").val(title);
+                  }
+              });
+    });
+
+  
+</script>
+
+
+{% endblock content %}
