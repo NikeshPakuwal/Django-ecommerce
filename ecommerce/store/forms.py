@@ -9,12 +9,12 @@ from django.contrib.auth.models import User
 class AuthUser(forms.ModelForm):
     class Meta:
         model = User
-        fields = '__all__'
+        fields = ["username", "password", "first_name", "last_name", "email", "is_active", "is_staff", "is_superuser", "user_permissions"]
     
     def __init__(self, *args, **kwargs):
         super(AuthUser, self).__init__(*args, **kwargs)
         for visible in self.visible_fields():
-            visible.field.widget.attrs['class'] = 'form-control'
+            visible.field.widget.attrs['class'] = 'form-group col'
 
     
 
@@ -34,7 +34,7 @@ class ecommerceCategory(forms.ModelForm):
     def __init__(self, *args, **kwargs):
         super(ecommerceCategory, self).__init__(*args, **kwargs)
         for visible in self.visible_fields():
-            visible.field.widget.attrs['class'] = 'form-control'
+            visible.field.widget.attrs['class'] = ''
 
 
 class ecommerceSubCategory(forms.ModelForm):

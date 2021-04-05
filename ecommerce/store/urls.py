@@ -12,7 +12,7 @@ urlpatterns = [
 
     #admin panel controls
     path('admin/auth/user/', authenticateViews.AdminUserList, name = 'auth_user'),
-    path('admin/aut', authenticateViews.AdminUser, name = 'auth_view'),
+    path('admin/auth/user/<int:id>/change/', authenticateViews.AdminUser, name = 'auth_view'),
     path('admin/user/delete', authenticateViews.user_delete, name = 'user_delete'),
 
     #registration url
